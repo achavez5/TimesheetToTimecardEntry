@@ -11,7 +11,35 @@ export const themeSettings = (mode) => {
       secondary: {
         main: '#3adfdf',
       },
-    }
+    },
+    typography: {
+        fontFamily: "Source Sans 3, sans-serif",
+        fontSize: 12,
+        h1: {
+          fontFamily: "Source Sans 3, sans-serif",
+          fontSize: 40
+        },
+        h2: {
+          fontFamily: "Source Sans 3, sans-serif",
+          fontSize: 32
+        },
+        h3:  {
+          fontFamily: "Source Sans 3, sans-serif",
+          fontSize: 24
+        },
+        h4: {
+          fontFamily: "Source Sans 3, sans-serif",
+          fontSize: 20
+        },
+        h5: {
+          fontFamily: "Source Sans 3, sans-serif",
+          fontSize: 16
+        }, 
+        h6: {
+          fontFamily: "Source Sans 3, sans-serif",
+          fontSize: 14
+        },
+      },
   }
 };
 

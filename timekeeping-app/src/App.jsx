@@ -15,9 +15,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <div className="App">
-            <header className="App-header">
-              <TimecardImport/>
-            </header>
+            <TimecardImport/>
           </div>
         </ThemeProvider>
       </ColorModeContext.Provider>
