@@ -25,6 +25,7 @@ const TextFormInput = ({id, type, label, fieldProps, multiline=false}: TextFormI
             shrink: true,
         }}
         multiline
+        maxRows={4}
         sx={{width: "100%", borderRadius: "4px", padding: "0"}}
         {...fieldProps}
         /> : 

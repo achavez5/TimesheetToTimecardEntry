@@ -15,8 +15,8 @@ const FormBox = ({children, handleSubmit} : FormBoxProps) => {
         borderRadius="4px"
         id="compounding-box"
         boxShadow={theme.palette.mode === "dark" ? "0px 0px 10px 0px rgba(0,0,0,0.75)" : "0px 0px 10px 0px rgba(0,0,0,0.25)"}
-        maxWidth="30vw"
-        minWidth="325px"
+        maxWidth="30vh"
+        minWidth="75%"
         padding="20px"
         gap="15px"
         display="flex"
