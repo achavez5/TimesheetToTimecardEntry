@@ -1,4 +1,4 @@
-import { Button, useTheme } from "@mui/material";
+import { Button } from "@mui/material";
 
 type SubmitProps = {
     label: string,
