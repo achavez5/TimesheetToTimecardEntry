@@ -1,7 +1,9 @@
 import { useFormik } from 'formik';
 import Box from '@mui/material/Box';
-import { TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material/';
+import { TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, Snackbar, SnackbarCloseReason, Button } from '@mui/material/';
 import { useState } from 'react';
+
+import { Debug, testDataScen1 } from './testData';
 
 import Topbar from '../../components/Topbar';
 import TextFormInput from '../../components/TextFormInput';
@@ -23,39 +25,60 @@ export const TimecardImport = () => {
             <TableCell>Saturday</TableCell>
             <TableCell>Total</TableCell>
         </TableRow>
-    </TableHead>
+    </TableHead>;
     let [tableBody, updateTableBody] = useState(
         [<TableRow></TableRow>]
     );
+    const [open, setOpen] = useState(false);
+
+    const handleClick = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (
+        event: React.SyntheticEvent | Event,
+        reason?: SnackbarCloseReason,
+    ) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+
+        setOpen(false);
+    };
+
+
+    // const [vertical, horizontal] = ['bottom', 'center'] as const;
     const formik = useFormik({
         initialValues: {
-            csvInput: "",
-            assignmentsInput: ""
+            csvInput: Debug ? testDataScen1.csvData : "",
+            assignmentsInput: Debug ? testDataScen1.assignments : ""
         },
         onSubmit: values => {
             let csvInput = parseCsv(values.csvInput);
             let assignments = parseAssignments(values.assignmentsInput);
 
-            console.log(csvInput);
-            console.log(assignments);
-
             if (csvInput === undefined || assignments === undefined) {
-                alert("Invalid input. Please check your input and try again.");
                 return;    
             }
 
             let timecards = parseTimecards(csvInput, assignments);
             if (timecards === undefined) {
-                alert("Invalid input. Please check your input and try again.");
                 return;
             }
-            const rows = buildRowsByAssignment(assignments, timecards);
+            const rows = buildRowsByAssignment(assignments, timecards, handleClick);
 
             updateTableBody(rows);
         },
     });
     return (
         <Box>
+            <Snackbar
+                open={open}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                autoHideDuration={2000}
+                onClose={handleClose}
+                message="Copied ✅"
+            />
             <Topbar title="Timecard Import" />
             <Box display="flex" marginTop={"1rem"}>   
                  <FormBox handleSubmit={formik.handleSubmit}>

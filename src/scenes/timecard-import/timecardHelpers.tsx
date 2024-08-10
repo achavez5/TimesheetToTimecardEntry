@@ -26,6 +26,13 @@ export const parseCsv = (csvInput: string): timecardDayEntries | undefined => {
 
     for (let i = 1; i < rows.length; i++) {
         let rowEntries = rows[i].split("\t");
+
+        // allow last line to be blank
+        if (i === rows.length - 1 && rowEntries.length === 1 && headers.length !== 1)
+        {
+            break;
+        }
+
         if (rowEntries.length !== headers.length) {
             alert("Row " + i + " does not have the same number of columns as the header. Format invalid. Please fix to continue processing.");
             return;
@@ -122,7 +129,16 @@ const findAssignment = (currentEntry:string , assignments: string[]) => {
     return "";
 };
 
-export const buildRowsByAssignment = (assignments: string[], timecardData: timecardDayEntries) => {
+export const buildRowsByAssignment = (assignments: string[], timecardData: timecardDayEntries, handleClick: () => void ) => {
+    const writeCellToClipboard = (e: any) => {
+        let cellText = e.currentTarget.textContent?.toString() || "";
+        if (cellText.includes("(") && cellText.includes(")")) {
+            cellText = cellText.substring(cellText.indexOf("(") + 1, cellText.indexOf(")"));
+        }
+        console.log("wooo", handleClick());
+        navigator.clipboard.writeText(cellText);
+    };
+
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let rows = [];
 
@@ -143,7 +159,20 @@ export const buildRowsByAssignment = (assignments: string[], timecardData: timec
         } else {
             continue;
         }
-        rows.push(<TableRow key={i+1}>{row.map(elem => <TableCell>{elem}</TableCell>)}</TableRow>);
+        rows.push(
+        <TableRow key={i+1}>
+            {row.map((elem, index) => 
+            
+                <TableCell onClick={index === 0 || elem === "" || index === row.length - 1 ? () => null : writeCellToClipboard}   
+                sx={index === 0 || elem === "" || index === row.length - 1 ? {} : 
+                    {
+                        cursor: "copy",
+                        '&:hover': {backgroundColor: `primary.main`},
+                        '&:active': {backgroundColor: `primary.dark`}
+                    }
+                }>{elem}</TableCell>
+            )
+        }</TableRow>);
     }
     return rows;
 }
