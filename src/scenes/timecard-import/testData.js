@@ -1,4 +1,4 @@
-export const Debug = true;
+export const UseTestData = false;
 
 export const testDataScen1 = {
     csvData: 

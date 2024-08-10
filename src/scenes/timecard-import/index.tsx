@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, Snackbar, SnackbarCloseReason } from '@mui/material/';
 import { useState } from 'react';
 
-import { Debug, testDataScen1 } from './testData';
+import { UseTestData, testDataScen1 } from './testData';
 
 import Topbar from '../../components/Topbar';
 import TextFormInput from '../../components/TextFormInput';
@@ -50,8 +50,8 @@ export const TimecardImport = () => {
     // const [vertical, horizontal] = ['bottom', 'center'] as const;
     const formik = useFormik({
         initialValues: {
-            csvInput: Debug ? testDataScen1.csvData : "",
-            assignmentsInput: Debug ? testDataScen1.assignments : ""
+            csvInput: UseTestData ? testDataScen1.csvData : "",
+            assignmentsInput: UseTestData ? testDataScen1.assignments : ""
         },
         onSubmit: values => {
             let csvInput = parseCsv(values.csvInput);
