@@ -132,47 +132,54 @@ const findAssignment = (currentEntry:string , assignments: string[]) => {
 export const buildRowsByAssignment = (assignments: string[], timecardData: timecardDayEntries, handleClick: () => void ) => {
     const writeCellToClipboard = (e: any) => {
         let cellText = e.currentTarget.textContent?.toString() || "";
-        if (cellText.includes("(") && cellText.includes(")")) {
-            cellText = cellText.substring(cellText.indexOf("(") + 1, cellText.indexOf(")"));
-        }
-        console.log("wooo", handleClick());
+        handleClick();
         navigator.clipboard.writeText(cellText);
     };
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    let rows = [];
+    let timeRows = [];
+    let notesRows = [];
 
     for (let i = 0; i < assignments.length; i++) {
-        let row = [assignments[i]];
+        let timeRow = [assignments[i]];
+        let notesRow = [assignments[i]];
         let totalHours = 0;
         for (let j = 0; j < days.length; j++) {
             let dayData = timecardData[days[j]]?.data;
             if (dayData === undefined || dayData[assignments[i]] === undefined) {
-                row.push("");
+                timeRow.push("");
+                notesRow.push("");
             } else {
-                row.push(dayData[assignments[i]].hours + (dayData[assignments[i]].notes.length > 0 ? " (" + dayData[assignments[i]].notes + ")" : ""));
+                timeRow.push(dayData[assignments[i]].hours.toString());
+                notesRow.push((dayData[assignments[i]].notes.length > 0 ? dayData[assignments[i]].notes : ""));
                 totalHours += dayData[assignments[i]].hours;
             }
         }
         if (totalHours > 0) {
-            row.push(totalHours.toString());
+            timeRow.push(totalHours.toString());
+            notesRow.push(totalHours.toString());
         } else {
             continue;
         }
-        rows.push(
+        timeRows.push(
         <TableRow key={i+1}>
-            {row.map((elem, index) => 
-            
-                <TableCell onClick={index === 0 || elem === "" || index === row.length - 1 ? () => null : writeCellToClipboard}   
-                sx={index === 0 || elem === "" || index === row.length - 1 ? {} : 
-                    {
-                        cursor: "copy",
-                        '&:hover': {backgroundColor: `primary.main`},
-                        '&:active': {backgroundColor: `primary.dark`}
-                    }
-                }>{elem}</TableCell>
+            {timeRow.map((elem, index) => 
+                <TableCell>{elem}</TableCell>
             )
         }</TableRow>);
+        notesRows.push(
+            <TableRow key={i+1}>
+                {notesRow.map((elem, index) => 
+                    <TableCell onClick={index === 0 || elem === "" || index === notesRow.length - 1 ? () => null : writeCellToClipboard}   
+                    sx={index === 0 || elem === "" || index === notesRow.length - 1 ? {} : 
+                        {
+                            cursor: "copy",
+                            '&:hover': {backgroundColor: `primary.main`},
+                            '&:active': {backgroundColor: `primary.dark`}
+                        }
+                    }>{elem}</TableCell>
+                )
+            }</TableRow>);
     }
-    return rows;
+    return [timeRows, notesRows];
 }

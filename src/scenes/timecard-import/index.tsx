@@ -1,6 +1,10 @@
 import { useFormik } from 'formik';
 import Box from '@mui/material/Box';
-import { TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, Snackbar, SnackbarCloseReason } from '@mui/material/';
+import { 
+    TableContainer, Table, TableBody, TableCell, 
+    TableHead, TableRow, Paper, Snackbar, 
+    SnackbarCloseReason, Tab, Tabs
+} from '@mui/material/';
 import { useState } from 'react';
 
 import { UseTestData, testDataScen1 } from './testData';
@@ -11,6 +15,35 @@ import FormBox from '../../components/FormBox';
 import SubmitButton from '../../components/SubmitButton';
 
 import { parseCsv, parseAssignments, parseTimecards, buildRowsByAssignment } from './timecardHelpers';
+
+
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
+function CustomTabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      </div>
+    );
+}
+
+function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
 
 export const TimecardImport = () => {
     let tableHeader = <TableHead>
@@ -26,10 +59,14 @@ export const TimecardImport = () => {
             <TableCell>Total</TableCell>
         </TableRow>
     </TableHead>;
-    let [tableBody, updateTableBody] = useState(
+    let [timeTableBody, updateTimeTableBody] = useState(
+        [<TableRow></TableRow>]
+    );
+    let [notesTableBody, updateNotesTableNotes] = useState(
         [<TableRow></TableRow>]
     );
     const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(0);
 
     const handleClick = () => {
         setOpen(true);
@@ -44,6 +81,10 @@ export const TimecardImport = () => {
         }
 
         setOpen(false);
+    };
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
     };
 
 
@@ -65,9 +106,11 @@ export const TimecardImport = () => {
             if (timecards === undefined) {
                 return;
             }
-            const rows = buildRowsByAssignment(assignments, timecards, handleClick);
+            const [timeRows, notesRows] = buildRowsByAssignment(assignments, timecards, handleClick);
 
-            updateTableBody(rows);
+            updateTimeTableBody(timeRows);
+            updateNotesTableNotes(notesRows);
+            console.log(timeRows == notesRows);
         },
     });
     return (
@@ -99,12 +142,28 @@ export const TimecardImport = () => {
                     <SubmitButton label="Submit" />
                 </FormBox>
             </Box>
-            <TableContainer component={Paper}>
-                <Table>
-                    {tableHeader}
-                    <TableBody>{tableBody}</TableBody>
-                </Table>
-            </TableContainer>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                    <Tab label="Time" {...a11yProps(0)} />
+                    <Tab label="Notes" {...a11yProps(1)} />
+                </Tabs>
+            </Box>
+            <CustomTabPanel value={value} index={0}> 
+                <TableContainer component={Paper}>
+                    <Table>
+                        {tableHeader}
+                        <TableBody>{timeTableBody}</TableBody>
+                    </Table>
+                </TableContainer>
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1}>
+                <TableContainer component={Paper}>
+                    <Table>
+                        {tableHeader}
+                        <TableBody>{notesTableBody}</TableBody>
+                    </Table>
+                </TableContainer>
+            </CustomTabPanel>
         </Box>
     );
 }

@@ -23,14 +23,9 @@ const FormBox = ({children, handleSubmit} : FormBoxProps) => {
         flexDirection={"column"}
         alignSelf="start"
         onSubmit={handleSubmit}
+        margin="20px auto 20px auto"
         sx={
             {
-            [theme.breakpoints.down("md")]: {
-                margin: "0 auto 20px auto",
-            },
-            [theme.breakpoints.up("md")]: {
-                margin: "0 20px 20px 20px",
-            },
             '& .MuiOutlinedInput': {
                 fontSize: "1px"
             },
