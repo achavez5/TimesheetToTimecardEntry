@@ -1,5 +1,6 @@
 
 import { TableCell, TableRow } from '@mui/material/';
+import { themeSettings } from '../../theme';
 
 type timeEntry = {
     hours: number,
@@ -8,6 +9,7 @@ type timeEntry = {
 
 type timecardData = {
     data: Record<string, timeEntry>,
+    dailyTotal: number,
     csvData: string[]
 }
 
@@ -23,6 +25,14 @@ export const parseCsv = (csvInput: string): timecardDayEntries | undefined => {
     const validHeaders = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const rows: string[] = csvInput.split("\n");
     const headers: string[] = rows[0].split("\t");
+
+    for (let i = 0; i < validHeaders.length; i++) {
+        timecardData[validHeaders[i]] = {
+            data: {},
+            dailyTotal: 0,
+            csvData: []
+        };
+    }
 
     for (let i = 1; i < rows.length; i++) {
         let rowEntries = rows[i].split("\t");
@@ -48,6 +58,7 @@ export const parseCsv = (csvInput: string): timecardDayEntries | undefined => {
             {
                 timecardData[header] = {
                     data: {},
+                    dailyTotal: 0,
                     csvData: []
                 };
             }
@@ -77,7 +88,7 @@ export const parseTimecards = (timecards: timecardDayEntries | undefined, assign
         const day = days[i];
         if (timecards[day]?.csvData.length < 0)
         {
-            // no time for day or day does not exist (object prototype properties)
+            // no time for day or day does not exist
             continue;
         }
 
@@ -110,6 +121,7 @@ export const parseTimecards = (timecards: timecardDayEntries | undefined, assign
 
             let timecardData = timecards[day].data[currentAssignment];
             timecardData.hours += 0.25;
+            timecards[day].dailyTotal += 0.25;  
             let note = dayData[j].substring(currentAssignment.length + 1 /** plus one to remove the space */);
             if (note && timecardData.notes.indexOf(note) < 0){
                 let assignmentData = timecards[day].data[currentAssignment];
@@ -139,7 +151,6 @@ export const buildRowsByAssignment = (assignments: string[], timecardData: timec
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let timeRows = [];
     let notesRows = [];
-
     for (let i = 0; i < assignments.length; i++) {
         let timeRow = [assignments[i]];
         let notesRow = [assignments[i]];
@@ -181,5 +192,17 @@ export const buildRowsByAssignment = (assignments: string[], timecardData: timec
                 )
             }</TableRow>);
     }
+
+    timeRows.push(<TableRow sx={{ backgroundColor:`${themeSettings().palette.primary.main}`}}key={-1}>
+        <TableCell>Total</TableCell>
+        {Object.keys(timecardData).map((elem, index) => {
+            console.log(elem, timecardData[elem].dailyTotal);
+            return <TableCell>{timecardData[elem].dailyTotal || ""}</TableCell>
+        }
+        )
+        }
+        <TableCell>{Object.keys(timecardData).map((elem) => timecardData[elem].dailyTotal).reduce((accumulator, currentValue) => accumulator + currentValue)}</TableCell>
+    </TableRow>);
+
     return [timeRows, notesRows];
 }
