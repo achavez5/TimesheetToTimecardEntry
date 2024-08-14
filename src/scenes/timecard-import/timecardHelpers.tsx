@@ -193,16 +193,15 @@ export const buildRowsByAssignment = (assignments: string[], timecardData: timec
             }</TableRow>);
     }
 
-    timeRows.push(<TableRow sx={{ backgroundColor:`${themeSettings().palette.primary.main}`}}key={-1}>
+    const totalRow = 
+    <TableRow sx={{ backgroundColor:`${themeSettings().palette.primary.main}`}}key={-1}>
         <TableCell>Total</TableCell>
-        {Object.keys(timecardData).map((elem, index) => {
-            console.log(elem, timecardData[elem].dailyTotal);
-            return <TableCell>{timecardData[elem].dailyTotal || ""}</TableCell>
-        }
-        )
-        }
+        {Object.keys(timecardData).map((elem, index) => <TableCell>{timecardData[elem].dailyTotal || ""}</TableCell>)}
         <TableCell>{Object.keys(timecardData).map((elem) => timecardData[elem].dailyTotal).reduce((accumulator, currentValue) => accumulator + currentValue)}</TableCell>
-    </TableRow>);
+    </TableRow>;
+
+    timeRows.push(totalRow);
+    notesRows.push(totalRow);
 
     return [timeRows, notesRows];
 }
