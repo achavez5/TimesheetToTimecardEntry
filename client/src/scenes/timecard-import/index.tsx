@@ -110,7 +110,6 @@ export const TimecardImport = () => {
 
             updateTimeTableBody(timeRows);
             updateNotesTableNotes(notesRows);
-            console.log(timeRows == notesRows);
         },
     });
     return (
