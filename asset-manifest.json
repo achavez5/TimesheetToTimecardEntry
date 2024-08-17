@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/TimesheetToTimecardEntry/static/css/main.5266936d.css",
-    "main.js": "/TimesheetToTimecardEntry/static/js/main.b671d6f6.js",
+    "main.js": "/TimesheetToTimecardEntry/static/js/main.7b66a4d5.js",
     "static/media/roboto-latin-400-normal.woff2": "/TimesheetToTimecardEntry/static/media/roboto-latin-400-normal.297d48e1b5a10c0831a9.woff2",
     "static/media/roboto-latin-400-normal.woff": "/TimesheetToTimecardEntry/static/media/roboto-latin-400-normal.047a7839f69b209db815.woff",
     "static/media/roboto-cyrillic-ext-400-normal.woff2": "/TimesheetToTimecardEntry/static/media/roboto-cyrillic-ext-400-normal.5cec61a21cc20180fbe1.woff2",
@@ -18,10 +18,10 @@
     "static/media/roboto-greek-ext-400-normal.woff": "/TimesheetToTimecardEntry/static/media/roboto-greek-ext-400-normal.16eb83b4a3b1ea994243.woff",
     "index.html": "/TimesheetToTimecardEntry/index.html",
     "main.5266936d.css.map": "/TimesheetToTimecardEntry/static/css/main.5266936d.css.map",
-    "main.b671d6f6.js.map": "/TimesheetToTimecardEntry/static/js/main.b671d6f6.js.map"
+    "main.7b66a4d5.js.map": "/TimesheetToTimecardEntry/static/js/main.7b66a4d5.js.map"
   },
   "entrypoints": [
     "static/css/main.5266936d.css",
-    "static/js/main.b671d6f6.js"
+    "static/js/main.7b66a4d5.js"
   ]
 }
