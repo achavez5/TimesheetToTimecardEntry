@@ -1,6 +1,6 @@
 
-import { TableCell, TableRow } from '@mui/material/';
-import { themeSettings } from '../../theme';
+import { TableRow } from '@mui/material/';
+import { StyledTableRow, StyledTableCell, CopyStyledTableCell } from './tableComponents';
 
 type timeEntry = {
     hours: number,
@@ -142,12 +142,6 @@ const findAssignment = (currentEntry:string , assignments: string[]) => {
 };
 
 export const buildRowsByAssignment = (assignments: string[], timecardData: timecardDayEntries, handleClick: () => void ) => {
-    const writeCellToClipboard = (e: any) => {
-        let cellText = e.currentTarget.textContent?.toString() || "";
-        handleClick();
-        navigator.clipboard.writeText(cellText);
-    };
-
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let timeRows = [];
     let notesRows = [];
@@ -172,36 +166,27 @@ export const buildRowsByAssignment = (assignments: string[], timecardData: timec
         } else {
             continue;
         }
+        let key = i + 1;
         timeRows.push(
-        <TableRow key={i+1}>
-            {timeRow.map((elem, index) => 
-                <TableCell>{elem}</TableCell>
-            )
-        }</TableRow>);
-        notesRows.push(
-            <TableRow key={i+1}>
-                {notesRow.map((elem, index) => 
-                    <TableCell onClick={index === 0 || elem === "" || index === notesRow.length - 1 ? () => null : writeCellToClipboard}   
-                    sx={index === 0 || elem === "" || index === notesRow.length - 1 ? {} : 
-                        {
-                            cursor: "copy",
-                            '&:hover': {backgroundColor: `primary.main`},
-                            '&:active': {backgroundColor: `primary.dark`}
-                        }
-                    }>{elem}</TableCell>
+            <StyledTableRow key={key}>
+                {timeRow.map((elem) => 
+                    <StyledTableCell>{elem}</StyledTableCell>
                 )
-            }</TableRow>);
+            }</StyledTableRow>
+        );
+        notesRows.push(
+            <StyledTableRow key={key}>
+                { notesRow.map((elem, index) => <CopyStyledTableCell index={index} elem={elem} handleClick={handleClick}/>) }
+            </StyledTableRow>
+        );
     }
 
-    const totalRow = 
-    <TableRow sx={{ backgroundColor:`${themeSettings().palette.primary.main}`}}key={-1}>
-        <TableCell>Total</TableCell>
-        {Object.keys(timecardData).map((elem, index) => <TableCell>{timecardData[elem].dailyTotal || ""}</TableCell>)}
-        <TableCell>{Object.keys(timecardData).map((elem) => timecardData[elem].dailyTotal).reduce((accumulator, currentValue) => accumulator + currentValue)}</TableCell>
-    </TableRow>;
+    let totalRow = 
+    [<TableRow>
+            <StyledTableCell>Total</StyledTableCell>
+            {Object.keys(timecardData).map((elem) => <StyledTableCell>{timecardData[elem].dailyTotal || ""}</StyledTableCell>)}
+            <StyledTableCell>{Object.keys(timecardData).map((elem) => timecardData[elem].dailyTotal).reduce((accumulator, currentValue) => accumulator + currentValue)}</StyledTableCell>
+    </TableRow>];
 
-    timeRows.push(totalRow);
-    notesRows.push(totalRow);
-
-    return [timeRows, notesRows];
+    return [timeRows, notesRows, totalRow];
 }

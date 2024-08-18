@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import Box from '@mui/material/Box';
 import { 
-    TableContainer, Table, TableBody, TableCell, 
+    TableContainer, Table, TableBody, TableFooter, 
     TableHead, TableRow, Paper, Snackbar, 
     SnackbarCloseReason, Tab, Tabs
 } from '@mui/material/';
@@ -15,7 +15,7 @@ import FormBox from '../../components/FormBox';
 import SubmitButton from '../../components/SubmitButton';
 
 import { parseCsv, parseAssignments, parseTimecards, buildRowsByAssignment } from './timecardHelpers';
-
+import { StyledTableCell } from './tableComponents';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -48,15 +48,15 @@ function a11yProps(index: number) {
 export const TimecardImport = () => {
     let tableHeader = <TableHead>
         <TableRow>
-            <TableCell>Assignment</TableCell>
-            <TableCell>Sunday</TableCell>
-            <TableCell>Monday</TableCell>
-            <TableCell>Tuesday</TableCell>
-            <TableCell>Wednesday</TableCell>
-            <TableCell>Thursday</TableCell>
-            <TableCell>Friday</TableCell>
-            <TableCell>Saturday</TableCell>
-            <TableCell>Total</TableCell>
+            <StyledTableCell>Assignment</StyledTableCell>
+            <StyledTableCell>Sunday</StyledTableCell>
+            <StyledTableCell>Monday</StyledTableCell>
+            <StyledTableCell>Tuesday</StyledTableCell>
+            <StyledTableCell>Wednesday</StyledTableCell>
+            <StyledTableCell>Thursday</StyledTableCell>
+            <StyledTableCell>Friday</StyledTableCell>
+            <StyledTableCell>Saturday</StyledTableCell>
+            <StyledTableCell>Total</StyledTableCell>
         </TableRow>
     </TableHead>;
     let [timeTableBody, updateTimeTableBody] = useState(
@@ -65,6 +65,18 @@ export const TimecardImport = () => {
     let [notesTableBody, updateNotesTableNotes] = useState(
         [<TableRow></TableRow>]
     );
+    let [footerRow, updateFooterRow] = useState([
+        <TableRow>
+            <StyledTableCell></StyledTableCell>
+            <StyledTableCell>0</StyledTableCell>
+            <StyledTableCell>0</StyledTableCell>
+            <StyledTableCell>0</StyledTableCell>
+            <StyledTableCell>0</StyledTableCell>
+            <StyledTableCell>0</StyledTableCell>
+            <StyledTableCell>0</StyledTableCell>
+            <StyledTableCell>0</StyledTableCell>
+            <StyledTableCell>0</StyledTableCell>
+        </TableRow>]);
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
 
@@ -106,10 +118,11 @@ export const TimecardImport = () => {
             if (timecards === undefined) {
                 return;
             }
-            const [timeRows, notesRows] = buildRowsByAssignment(assignments, timecards, handleClick);
+            const [timeRows, notesRows, footerRow] = buildRowsByAssignment(assignments, timecards, handleClick);
 
             updateTimeTableBody(timeRows);
             updateNotesTableNotes(notesRows);
+            updateFooterRow(footerRow);
         },
     });
     return (
@@ -152,6 +165,7 @@ export const TimecardImport = () => {
                     <Table>
                         {tableHeader}
                         <TableBody>{timeTableBody}</TableBody>
+                        <TableFooter>{footerRow}</TableFooter>
                     </Table>
                 </TableContainer>
             </CustomTabPanel>
@@ -160,6 +174,7 @@ export const TimecardImport = () => {
                     <Table>
                         {tableHeader}
                         <TableBody>{notesTableBody}</TableBody>
+                        <TableFooter>{footerRow}</TableFooter>
                     </Table>
                 </TableContainer>
             </CustomTabPanel>

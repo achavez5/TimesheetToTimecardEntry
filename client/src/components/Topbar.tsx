@@ -14,7 +14,7 @@ const Topbar = (props: TopbarProps) => {
 
   return (
     <Box display="flex" justifyContent="space-between" p={2} sx={{backgroundColor: theme.palette.primary.main}}>
-      <Typography variant="h2">{props.title || ""}</Typography>
+      <Typography variant="h2" >{props.title || ""}</Typography>
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (<DarkModeOutlinedIcon />) : (<LightModeOutlinedIcon />)}
