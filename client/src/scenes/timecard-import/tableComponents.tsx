@@ -3,14 +3,14 @@ import { TableCell, TableRow, tableCellClasses, styled } from '@mui/material/';
 export const StyledTableCell = styled(TableCell)(({ theme }) => (
     {
         [`&.${tableCellClasses.head}`]: {
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: theme.palette.secondary.main,
             fontSize: 14,
         },
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
         },
         [`&.${tableCellClasses.footer}`]: {
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: theme.palette.secondary.main,
             fontSize: 14,
         },
         [`&.${tableCellClasses.body}:nth-of-type(2)`]: {

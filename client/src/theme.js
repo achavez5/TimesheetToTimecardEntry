@@ -6,10 +6,10 @@ export const themeSettings = (mode) => {
     palette: {
       mode: mode,
       primary: {
-        main: '#df3a3a',
+        main: mode === 'light' ? '#0098aa' : '#006E7A',
       },
       secondary: {
-        main: '#3adfdf',
+        main: mode === 'light' ? '#ff5663' : '#FF858F',
       },
     },
     typography: {
